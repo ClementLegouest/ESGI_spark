@@ -10,6 +10,12 @@ def main():
 
     football_df = spark.read.csv('./data/df_matches.csv', header=True, sep=',')
 
-    football_df.show()
+    clean_football_df = football_df.withColumn('match', football_df.X4)\
+        .withColumn('competition', football_df.X6)\
+        .drop(football_df.X4)\
+        .drop(football_df.X6)
+
+    clean_football_df.show()
+    clean_football_df.printSchema()
 
 main()
