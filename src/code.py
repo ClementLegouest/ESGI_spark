@@ -1,5 +1,17 @@
+from pyspark.sql.functions import udf
 from pyspark.sql import SparkSession
 from pyspark import SparkConf
+from pyspark.sql.types import IntegerType
+
+
+def shift_na_to_zero(penalty):
+    if penalty == "NA":
+        return 0
+    else:
+        return 1
+
+
+clean_penalty_udf = udf(lambda penalty: shift_na_to_zero(penalty), IntegerType())
 
 
 def main():
@@ -12,10 +24,17 @@ def main():
 
     clean_football_df = football_df.withColumn('match', football_df.X4)\
         .withColumn('competition', football_df.X6)\
+        .withColumn('penalty_france', clean_penalty_udf(football_df.penalty_france))\
+        .withColumn('penalty_adversaire', clean_penalty_udf(football_df.penalty_adversaire))\
         .drop(football_df.X4)\
-        .drop(football_df.X6)
+        .drop(football_df.X6)\
+        .drop(football_df.X2)\
+        .drop(football_df.X5)\
+        .drop(football_df.year)\
+        .drop(football_df.outcome)\
+        .drop(football_df.no)
 
-    clean_football_df.show()
+    clean_football_df.show(100)
     clean_football_df.printSchema()
 
 main()
