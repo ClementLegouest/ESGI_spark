@@ -11,9 +11,13 @@ Sur le poste doivent-être installés :
 ## Compilation
 
 Depuis la racine du projet, exécuter la commande
+
 ``` python setup.py bdist_egg ```
 
 ## Execution
 
 Depuis la racine du projet, exécuter la commande
-``` spark-submit --master local --py-files dist/FootballStatistics-0-py3.6.egg launch.py ```
+
+``` spark-submit --deploy-mode client src/Application.py file.csv ```
+
+où file.csv est le fichier de données à traiter
