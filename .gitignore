@@ -1,2 +1,6 @@
 data
 stats.parquet
+FootballStatistics.egg-info
+dist
+build
+**/__pycache__
